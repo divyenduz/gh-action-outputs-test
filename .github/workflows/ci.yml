@@ -1,0 +1,28 @@
+name: Outputs Test
+# This workflow is triggered on pushes to the repository.
+on: [push]
+
+jobs:
+  outputs-test:
+    name: Outputs Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Install Dependencies
+        run: yarn install
+
+      - name: 'Change Repo State'
+        run: yarn ts-node app/utils/random.ts
+
+      - name: 'Did Something Change?'
+        id: did_schema_or_warning_change
+        run: yarn ts-node app/utils/did-schema-change.ts
+
+      - name: 'Introspection: Post to Slack'
+        run: echo ${{ steps.did_schema_or_warning_change.outputs.didChange }}
+
+      - name: 'Introspection: Post to Slack TS'
+        if: ${{ steps.did_schema_or_warning_change.outputs.didChange == 'true' }}
+        run: yarn ts-node app/utils/another-script.ts
