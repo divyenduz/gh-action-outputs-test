@@ -5,6 +5,6 @@
     "typescript": "^3.9.6"
   },
   "dependencies": {
-    "@actions/core": "^1.2.4"
+    "@actions/core": "^1.2.6"
   }
 }
